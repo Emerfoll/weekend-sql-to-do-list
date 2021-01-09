@@ -38,11 +38,13 @@ function rowClick() {
   let task = $(this).closest("tr").data("task");
   console.log(task);
   
+  let status = { complete: task.complete}
+  
 
   $.ajax({
     type: 'PUT',
-    url: '/todo',
-    data: task
+    url: `/todo/${task.id}`,
+    data: status
   }).then(function (response) {
     console.log('Marked as complete');
     getList();
