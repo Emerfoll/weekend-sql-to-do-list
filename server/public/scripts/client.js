@@ -1,7 +1,7 @@
-console.log( 'js' );
+console.log('js');
 
-$( document ).ready( function(){
-  console.log( 'JQ' );
+$(document).ready(function () {
+  console.log('JQ');
   // Establish Click Listeners
   setupClickListeners();
   getList();
@@ -9,18 +9,41 @@ $( document ).ready( function(){
 }); // end doc ready
 
 function setupClickListeners() {
-  $( '#addButton' ).on( 'click', addTask)
+  $('#addButton').on('click', addTask)
+  $('#remove').on('click', removeComplete)
   $('#taskList').on('click', '.clickable-row', rowClick)
 }
 
-function addTask(){
-  console.log( 'add' );
+function addTask() {
+  console.log('add');
+
+  let newTask = {
+    task: $("#taskIn").val(),
+    notes: $("#notesIn").val(),
+    dueDate: $("#dateIn").val(),
+    complete: 'incomplete'
+  };
+
+  $.ajax({
+    type: "POST",
+    url: "/todo",
+    data: newTask
+  }).then(function (response) {
+      $("#taskIn").val(""),
+      $("#notesIn").val(""),
+      $("#dateIn").val("")
+      getList();
+  });
+} // end addTask
+
+function removeComplete() {
+  console.log('Removed completed tasks');
   
-} // end add
+}
 
 function getList() {
   console.log('In getList');
-  
+
   $.ajax({
     type: 'GET',
     url: '/todo'
@@ -37,9 +60,9 @@ function rowClick() {
 
   let task = $(this).closest("tr").data("task");
   console.log(task);
-  
-  let status = { complete: task.complete}
-  
+
+  let status = { complete: task.complete }
+
 
   $.ajax({
     type: 'PUT',
@@ -57,7 +80,7 @@ function renderList(list) {
   console.log('list');
   $('#taskList').empty();
 
-  for(let i=0; i<list.length; i++) {
+  for (let i = 0; i < list.length; i++) {
     let task = list[i]
 
     let $tr = $(`<tr class="clickable-row"></tr>`)
@@ -68,5 +91,5 @@ function renderList(list) {
     $tr.append(`<td>${task.complete}</td>`);
     $('#taskList').append($tr);
   }
-  
+
 }
