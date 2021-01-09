@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TO DO LIST</title>
+    <script src="vendors/jquery-3.3.1.min.js" charset="utf-8"></script>
+    <script src="scripts/client.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="vendors/bootstrap.css">
+  </head>
+  <body>
+    <header>
+      <img src="" class="icon" />
+      <h1>TO DO LIST</h1>
+    </header>
+    <section id="addTask">
+      <h2>Add Task</h2>
+      <input type="text" id="taskIn" value="" placeholder="Task">
+      <input type="text" id="notesIn" value="" placeholder="Notes">
+      <input type="text" id="dateIn" value="" placeholder="Complete by">
+      <button type="button" id="addButton">Add Task</button>
+    </section>
+    <section>
+      <h2>All Tasks</h2>
+      <table class="table table-dark table-hover">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Notes</th>
+            <th>"Due Date"</th>
+            <th>Complete</th>
+          </tr>
+        </thead>
+        <tbody id="taskList">
+        </tbody>
+      </table>
+    </section>
+  </body>
+</html>
