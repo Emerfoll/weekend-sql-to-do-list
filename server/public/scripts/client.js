@@ -45,13 +45,30 @@ function addTask() {
 function removeComplete() {
   console.log('Removed completed tasks');
   console.log(todoList);
-  for (let i=0; i<todoList.length; i++) {
-    if (todoList[i].complete === "complete") {
-      deleteTask(todoList[i].id);
+  swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover these tasks!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  }).then((willDelete) => {
+    if (willDelete) {
+      for (let i=0; i<todoList.length; i++) {
+        if (todoList[i].complete === "complete") {
+          deleteTask(todoList[i].id);
+        }
+      }
+      swal("Completed tasks has been removed from your to-do list.", {
+        icon: "success",
+      });
+    } else {
+      swal("All completed tasks still on list. ");
     }
-  }
+  });
+
   
-}
+  
+} // end removeComplete
 
 function deleteClicked() {
   console.log('DELETE TASK');
@@ -74,7 +91,7 @@ function deleteClicked() {
       swal("Task still on list. ");
     }
   });
-}
+} // end deleteClicked
 
 function deleteTask(task) {
 
@@ -86,28 +103,31 @@ function deleteTask(task) {
     }).catch(function (error) {
       alert('Could not delete task.')
     })
-  }
+} // end deleteTask 
 
 function rowClick() {
   console.log('row clicked');
 
   let task = $(this).closest("tr").data("task");
   console.log(task);
+  let status = { complete: task.complete };
 
-  let status = { complete: task.complete }
-
+  let taskRow = $(this).closest("tr").attr('id');
+  console.log(taskRow);
+  
+  $(`#${taskRow}`).toggleClass("complete");
 
   $.ajax({
     type: 'PUT',
     url: `/todo/${task.id}`,
     data: status
   }).then(function (response) {
-    console.log('Marked as complete');
+    console.log('Completion status updated');
     getList();
   }).catch(function (error) {
     alert("error updating status", error);
   });
-}
+} // end rowClick
 
 function getList() {
   console.log('In getList');
@@ -121,7 +141,7 @@ function getList() {
   }).catch(function (error) {
     console.log('error in GET', error);
   });
-}
+} // end getList
 
 function renderList(list) {
   console.log('render list');
@@ -131,17 +151,16 @@ function renderList(list) {
     let task = list[i]
 
     todoList.push(task)
-    let $tr = $(`<tr ></tr>`)
+    let $tr = $(`<tr id="row${task.id}" ></tr>`)
     $tr.data('task', task);
     $tr.append(`<td class="clickable-row">${task.task}</td>`);
     $tr.append(`<td class="clickable-row">${task.notes}</td>`);
     $tr.append(`<td class="clickable-row">${task.dueDate}</td>`);
     $tr.append(`<td class="clickable-row">${task.complete}</td>`);
-    $tr.append(`<td><button type="button" class="btn btn-danger delete" id=${task.id}>X</button></td>`);
+    $tr.append(`<td><button type="button" class="btn btn-danger delete">X</button></td>`);
     $('#taskList').append($tr);
   }
-
-}
+} // end renderList
 
 
 

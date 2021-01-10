@@ -6,18 +6,17 @@
   <title>TO DO LIST</title>
   <script src="vendors/jquery-3.3.1.min.js" charset="utf-8"></script>
   <script src="scripts/client.js" charset="utf-8"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <link rel="stylesheet" href="vendors/bootstrap.css">
   <link rel="stylesheet" href="styles/style.css">
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body>
   <header>
     <img src="" class="icon" />
-    <h1>TO DO LIST</h1>
+    <h1 class="listHeader">TO DO LIST</h1>
   </header>
   <section id="addTask">
-    <h2>Add Task</h2>
     <label for="taskIn" class="form-label">Add Task</label>
     <input type="text" id="taskIn" class="form-control" placeholder="Task">
     <label for="notesIn" class="form-label">Add Notes</label>
@@ -27,7 +26,7 @@
     <button type="button" class="btn btn-success" id="addButton">Add Task</button>
   </section>
   <section>
-    <h2 id="allTasks">All Tasks</h2>
+    <h2 class="listHeader">All Tasks</h2>
     <table class="table table-dark table-hover">
       <thead>
         <tr>
