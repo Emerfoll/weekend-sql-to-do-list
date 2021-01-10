@@ -1,23 +1,23 @@
 console.log('js');
 
+
 $(document).ready(function () {
   console.log('JQ');
   // Establish Click Listeners
   setupClickListeners();
   getList();
-  // $('.close').onmouseenter(showX)
-  // $('.close').mouseleave(hideX)
 
 
 }); // end doc ready
 
 function setupClickListeners() {
   $('#addButton').on('click', addTask)
-  $('#remove').on('click', removeComplete)
   $('#taskList').on('click', '.clickable-row', rowClick)
-  $('#taskList').on('click', '.delete', deleteTask)
-
+  $('#taskList').on('click', '.delete', deleteClicked)
+  $('#removeComplete').on('click', removeComplete)
 }
+
+let todoList = [];
 
 function addTask() {
   console.log('add');
@@ -34,48 +34,59 @@ function addTask() {
     url: "/todo",
     data: newTask
   }).then(function (response) {
-      $("#taskIn").val(""),
+    $("#taskIn").val(""),
       $("#notesIn").val(""),
       $("#dateIn").val("")
-      getList();
+    getList();
   });
 } // end addTask
 
 
 function removeComplete() {
   console.log('Removed completed tasks');
+  console.log(todoList);
+  for (let i=0; i<todoList.length; i++) {
+    if (todoList[i].complete === "complete") {
+      deleteTask(todoList[i].id);
+    }
+  }
   
 }
 
-function deleteTask() {
+function deleteClicked() {
   console.log('DELETE TASK');
-  
   let task = $(this).closest("tr").data("task").id;
-  console.log(task);
-  
-  $.ajax({
-    type: 'DELETE',
-    url: `/todo/${task.id}`
-  }).then(function (resopnse) {
-    getList();
-  }).catch(function (error) {
-    alert('Could not delete task.')
-  })
-}
 
-function getList() {
-  console.log('In getList');
 
-  $.ajax({
-    type: 'GET',
-    url: '/todo'
-  }).then(function (response) {
-    console.log(response);
-    renderList(response);
-  }).catch(function (error) {
-    console.log('error in GET', error);
+  swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this task!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  }).then((willDelete) => {
+    if (willDelete) {
+      deleteTask(task);
+      swal("Task has been removed from your to-do list.", {
+        icon: "success",
+      });
+    } else {
+      swal("Task still on list. ");
+    }
   });
 }
+
+function deleteTask(task) {
+
+    $.ajax({
+      type: 'DELETE',
+      url: `/todo/${task}`
+    }).then(function (resopnse) {
+      getList();
+    }).catch(function (error) {
+      alert('Could not delete task.')
+    })
+  }
 
 function rowClick() {
   console.log('row clicked');
@@ -98,21 +109,40 @@ function rowClick() {
   });
 }
 
+function getList() {
+  console.log('In getList');
+
+  $.ajax({
+    type: 'GET',
+    url: '/todo'
+  }).then(function (response) {
+    console.log(response);
+    renderList(response);
+  }).catch(function (error) {
+    console.log('error in GET', error);
+  });
+}
+
 function renderList(list) {
   console.log('render list');
   $('#taskList').empty();
-
+  todoList = [];
   for (let i = 0; i < list.length; i++) {
     let task = list[i]
 
+    todoList.push(task)
     let $tr = $(`<tr ></tr>`)
     $tr.data('task', task);
     $tr.append(`<td class="clickable-row">${task.task}</td>`);
     $tr.append(`<td class="clickable-row">${task.notes}</td>`);
-    $tr.append(`<td class="clickable-row">${task.dateAdded}</td>`);
+    $tr.append(`<td class="clickable-row">${task.dueDate}</td>`);
     $tr.append(`<td class="clickable-row">${task.complete}</td>`);
     $tr.append(`<td><button type="button" class="btn btn-danger delete" id=${task.id}>X</button></td>`);
     $('#taskList').append($tr);
   }
 
 }
+
+
+
+

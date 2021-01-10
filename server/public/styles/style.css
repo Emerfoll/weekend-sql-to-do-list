@@ -1,13 +1,25 @@
-.close {
-    height: 1.2rem;
-    width: 1.2rem;
+
+.form-label {
+    padding-top: 13px;
+    padding-left: 15px;
 }
 
-.clickable-row:hover {
-
+.form-control {
+    margin-left: 5px;
 }
 
-.red {
-    color: red;
-    background-color: orangered;
+#addButton {
+    margin: 10px
+}
+
+#allTasks{
+    text-align: center;
+}
+
+#removeComplete {
+    margin: 10px
+}
+
+.complete {
+    background-color: green;
 }
