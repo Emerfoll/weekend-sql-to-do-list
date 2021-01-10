@@ -22,23 +22,33 @@ let todoList = [];
 function addTask() {
   console.log('add');
 
-  let newTask = {
-    task: $("#taskIn").val(),
-    notes: $("#notesIn").val(),
-    dueDate: $("#dateIn").val(),
-    complete: 'incomplete'
-  };
+  if ($("#taskIn").val() === '' || $("#notesIn").val() === '') {
+    alert('Please fill out the required fields.')
+    $('#taskIn').addClass("required")
+    $('#notesIn').addClass("required")
+  } else {
 
-  $.ajax({
-    type: "POST",
-    url: "/todo",
-    data: newTask
-  }).then(function (response) {
-    $("#taskIn").val(""),
-      $("#notesIn").val(""),
-      $("#dateIn").val("")
-    getList();
-  });
+    $('#taskIn').removeClass("required")
+    $('#notesIn').removeClass("required")
+
+    let newTask = {
+      task: $("#taskIn").val(),
+      notes: $("#notesIn").val(),
+      dueDate: $("#dateIn").val(),
+      complete: 'incomplete'
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "/todo",
+      data: newTask
+    }).then(function (response) {
+      $("#taskIn").val(""),
+        $("#notesIn").val(""),
+        $("#dateIn").val("")
+      getList();
+    });
+  }
 } // end addTask
 
 
@@ -53,7 +63,7 @@ function removeComplete() {
     dangerMode: true,
   }).then((willDelete) => {
     if (willDelete) {
-      for (let i=0; i<todoList.length; i++) {
+      for (let i = 0; i < todoList.length; i++) {
         if (todoList[i].complete === "complete") {
           deleteTask(todoList[i].id);
         }
@@ -66,8 +76,8 @@ function removeComplete() {
     }
   });
 
-  
-  
+
+
 } // end removeComplete
 
 function deleteClicked() {
@@ -95,14 +105,14 @@ function deleteClicked() {
 
 function deleteTask(task) {
 
-    $.ajax({
-      type: 'DELETE',
-      url: `/todo/${task}`
-    }).then(function (resopnse) {
-      getList();
-    }).catch(function (error) {
-      alert('Could not delete task.')
-    })
+  $.ajax({
+    type: 'DELETE',
+    url: `/todo/${task}`
+  }).then(function (resopnse) {
+    getList();
+  }).catch(function (error) {
+    alert('Could not delete task.')
+  })
 } // end deleteTask 
 
 function rowClick() {
@@ -111,11 +121,6 @@ function rowClick() {
   let task = $(this).closest("tr").data("task");
   console.log(task);
   let status = { complete: task.complete };
-
-  let taskRow = $(this).closest("tr").attr('id');
-  console.log(taskRow);
-  
-  $(`#${taskRow}`).toggleClass("complete");
 
   $.ajax({
     type: 'PUT',
@@ -151,7 +156,7 @@ function renderList(list) {
     let task = list[i]
 
     todoList.push(task)
-    let $tr = $(`<tr id="row${task.id}" ></tr>`)
+    let $tr = $(`<tr></tr>`)
     $tr.data('task', task);
     $tr.append(`<td class="clickable-row">${task.task}</td>`);
     $tr.append(`<td class="clickable-row">${task.notes}</td>`);
@@ -159,6 +164,9 @@ function renderList(list) {
     $tr.append(`<td class="clickable-row">${task.complete}</td>`);
     $tr.append(`<td><button type="button" class="btn btn-danger delete">X</button></td>`);
     $('#taskList').append($tr);
+    if (task.complete === 'complete') {
+      $($tr).addClass("complete table-secondary")
+    }
   }
 } // end renderList
 

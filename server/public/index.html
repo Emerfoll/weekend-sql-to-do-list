@@ -13,20 +13,21 @@
 
 <body>
   <header>
-    <img src="" class="icon" />
     <h1 class="listHeader">TO DO LIST</h1>
   </header>
   <section id="addTask">
     <label for="taskIn" class="form-label">Add Task</label>
-    <input type="text" id="taskIn" class="form-control" placeholder="Task">
+    <input type="text" id="taskIn" class="form-control" placeholder="Task *">
     <label for="notesIn" class="form-label">Add Notes</label>
-    <input type="text" id="notesIn" class="form-control" placeholder="Notes">
+    <input type="text" id="notesIn" class="form-control" placeholder="Notes *">
     <label for="dateIn" class="form-label">Complete by</label>
     <input type="text" id="dateIn" class="form-control" placeholder="Complete by">
     <button type="button" class="btn btn-success" id="addButton">Add Task</button>
+    <p id="req">Required fields marked with *</p>
   </section>
   <section>
     <h2 class="listHeader">All Tasks</h2>
+    <p class="listHeader">Tap a task to mark it as complete or incomplete.</p>
     <table class="table table-dark table-hover">
       <thead>
         <tr>

@@ -4,6 +4,7 @@ body {
 }
 
 
+
 .form-label {
     padding-top: 13px;
     padding-left: 15px;
@@ -25,6 +26,16 @@ body {
     margin: 10px
 }
 
+#req {
+    margin-left: 8px;
+}
+
+.required {
+    color: black;
+    background-color: red;
+}
+
 .complete {
     color: green;
+    text-decoration: line-through;
 }
