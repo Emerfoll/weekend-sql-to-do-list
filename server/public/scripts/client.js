@@ -5,6 +5,9 @@ $(document).ready(function () {
   // Establish Click Listeners
   setupClickListeners();
   getList();
+  // $('.close').onmouseenter(showX)
+  // $('.close').mouseleave(hideX)
+
 
 }); // end doc ready
 
@@ -12,6 +15,8 @@ function setupClickListeners() {
   $('#addButton').on('click', addTask)
   $('#remove').on('click', removeComplete)
   $('#taskList').on('click', '.clickable-row', rowClick)
+  $('#taskList').on('click', '.delete', deleteTask)
+
 }
 
 function addTask() {
@@ -36,9 +41,26 @@ function addTask() {
   });
 } // end addTask
 
+
 function removeComplete() {
   console.log('Removed completed tasks');
   
+}
+
+function deleteTask() {
+  console.log('DELETE TASK');
+  
+  let task = $(this).closest("tr").data("task").id;
+  console.log(task);
+  
+  $.ajax({
+    type: 'DELETE',
+    url: `/todo/${task.id}`
+  }).then(function (resopnse) {
+    getList();
+  }).catch(function (error) {
+    alert('Could not delete task.')
+  })
 }
 
 function getList() {
@@ -77,18 +99,19 @@ function rowClick() {
 }
 
 function renderList(list) {
-  console.log('list');
+  console.log('render list');
   $('#taskList').empty();
 
   for (let i = 0; i < list.length; i++) {
     let task = list[i]
 
-    let $tr = $(`<tr class="clickable-row"></tr>`)
+    let $tr = $(`<tr ></tr>`)
     $tr.data('task', task);
-    $tr.append(`<td>${task.task}</td>`);
-    $tr.append(`<td>${task.notes}</td>`);
-    $tr.append(`<td>${task.dateAdded}</td>`);
-    $tr.append(`<td>${task.complete}</td>`);
+    $tr.append(`<td class="clickable-row">${task.task}</td>`);
+    $tr.append(`<td class="clickable-row">${task.notes}</td>`);
+    $tr.append(`<td class="clickable-row">${task.dateAdded}</td>`);
+    $tr.append(`<td class="clickable-row">${task.complete}</td>`);
+    $tr.append(`<td><button type="button" class="btn btn-danger delete" id=${task.id}>X</button></td>`);
     $('#taskList').append($tr);
   }
 
